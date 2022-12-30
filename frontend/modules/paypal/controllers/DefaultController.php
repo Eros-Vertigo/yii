@@ -36,4 +36,14 @@ class DefaultController extends Controller
         }
         return true;
     }
+
+    public function actionSync()
+    {
+        $get = Yii::$app->request->get();
+        $post = Yii::$app->request->post();
+        echo "<pre>";
+        var_dump($get, $post);
+        echo "<pre>";
+        exit;
+    }
 }
