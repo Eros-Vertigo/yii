@@ -35,6 +35,7 @@ class DefaultController extends Controller
         self::logResult($post);
         $get = Yii::$app->request->get();
         self::logResult($get);
+        self::logResult(Yii::$app->request->getRawBody());
     }
 
     public function actionSync()
