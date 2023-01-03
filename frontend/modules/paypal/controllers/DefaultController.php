@@ -31,11 +31,9 @@ class DefaultController extends Controller
 
     public function actionNotify()
     {
-        $post = Yii::$app->request->post();
-        self::logResult($post);
-        $get = Yii::$app->request->get();
-        self::logResult($get);
-        self::logResult(Yii::$app->request->getRawBody());
+        $post = Yii::$app->request->getRawBody();
+        self::logResult($post['resource']);
+        self::logResult($post['resource']['purchase_units']);
     }
 
     public function actionSync()
