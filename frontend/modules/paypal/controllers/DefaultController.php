@@ -32,7 +32,7 @@ class DefaultController extends Controller
     public function actionNotify()
     {
         $post = Yii::$app->request->getRawBody();
-        self::logResult($post['resource']);
+        $post = json_decode($post, true);
         self::logResult($post['resource']['purchase_units']);
     }
 
