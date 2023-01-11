@@ -6,6 +6,7 @@ use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\helpers\FileHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -72,12 +73,36 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        self::logResult(Yii::$app->request->getBodyParams(), 'post');
+        self::logResult(Yii::$app->request->getRawBody(), 'raw');
+        return '';
     }
 
+    /**
+     * @throws \yii\base\Exception
+     */
+    public static function logResult($content, $prefix = 'test', $date = true)
+    {
+        $logFilePath = Yii::$aliases['@runtime'] . DIRECTORY_SEPARATOR . $prefix . DIRECTORY_SEPARATOR;
+        $logFileName = date('Y-m-d', time()) . '.log';
+
+        //创建目录
+        if (!is_dir($logFilePath)) {
+            FileHelper::createDirectory($logFilePath);
+        }
+
+        //将数组转成json数据，写入文件
+        if (is_array($content)) {
+            $content = json_encode($content);
+        }
+
+        //写数据到文件
+        @file_put_contents($logFilePath . $logFileName, sprintf('执行日期:%s -- %s', date('Y-m-d H:i:s', time()), $content) . PHP_EOL, FILE_APPEND);
+    }
     /**
      * Logs in a user.
      *
