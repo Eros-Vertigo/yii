@@ -77,8 +77,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        self::logResult(Yii::$app->request->getBodyParams(), 'post');
-        self::logResult(Yii::$app->request->getRawBody(), 'raw');
+        if (!empty(Yii::$app->request->getRawBody())) {
+            self::logResult(Yii::$app->request->getRawBody(), 'remita-raw');
+        }
+        if (!empty(Yii::$app->request->getBodyParams())) {
+            self::logResult(Yii::$app->request->getBodyParams(), 'remita-post');
+        }
+        if (!empty(Yii::$app->request->get())) {
+            self::logResult(Yii::$app->request->getBodyParams(), 'remita-get');
+        }
         return '';
     }
 
@@ -103,6 +110,7 @@ class SiteController extends Controller
         //写数据到文件
         @file_put_contents($logFilePath . $logFileName, sprintf('执行日期:%s -- %s', date('Y-m-d H:i:s', time()), $content) . PHP_EOL, FILE_APPEND);
     }
+
     /**
      * Logs in a user.
      *
@@ -242,8 +250,8 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionVerifyEmail($token)
     {
